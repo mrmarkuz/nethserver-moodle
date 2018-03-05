@@ -8,6 +8,12 @@
 password=`perl -e "use NethServer::Password; print NethServer::Password::store('moodle');"`
 
 # initialize grants mysql moodle database
-/usr/bin/mysql --defaults-file=/root/.my.cnf -e "CREATE DATABASE IF NOT EXISTS moodle;"
+/usr/bin/mysql --defaults-file=/root/.my.cnf -e "CREATE DATABASE IF NOT EXISTS moodle character set utf8mb4 collate utf8mb4_bin;"
 /usr/bin/mysql --defaults-file=/root/.my.cnf -e "grant all on moodle.* to 'moodle'@'localhost' identified by '$password';"
-/usr/bin/mysql --defaults-file=/root/.my.cnf -e "FLUSH PRIVILEGES"
+#/usr/bin/mysql --defaults-file=/root/.my.cnf -e "FLUSH PRIVILEGES"
+
+# Install moodle
+tar -xzf /usr/share/moodle.tgz -C /usr/share/
+mkdir -p /var/lib/nethserver/moodledata
+chown -R apache:apache /usr/share/moodle /var/lib/nethserver/moodledata
+systemctl restart rh-php71-php-fpm

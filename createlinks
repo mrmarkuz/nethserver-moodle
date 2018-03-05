@@ -39,7 +39,7 @@ event_actions("interface-update", qw(
 event_templates("nethserver-moodle-update", qw(
     /etc/httpd/conf.d/default-virtualhost.inc
     /etc/httpd/conf.d/moodle.conf
-    /var/www/moodle/web/config.php
+    /usr/share/moodle/config.php
 ));
 event_templates("certificate-update", qw(
     /etc/httpd/conf.d/moodle.conf
@@ -56,4 +56,6 @@ event_templates("nethserver-letsencrypt-update", qw(
 #
 event_services("nethserver-moodle-update", qw(
     httpd restart
+    mysqld restart
+    rh-php71-php-fpm restart
 ));

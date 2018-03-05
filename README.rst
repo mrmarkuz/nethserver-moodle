@@ -10,7 +10,7 @@ Installation
 
 When installed, the package does the following:
 
-* Install `moodle` package from EPEL repository
+* Download latest `moodle` package from moodle website.
 
 * Install `moodle` package dependencies (e.g., `php-soap`,
   `php-pecl-zendopcache`, `php-ldap`) not considered by `moodle`

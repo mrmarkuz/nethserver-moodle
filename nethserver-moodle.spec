@@ -1,17 +1,20 @@
 Name: nethserver-moodle
 Summary: Moodle integration in NethServer
-Version: 0.0.9
+Version: 0.1.0
 Release: 1%{?dist}
 License: GPL
 Source: %{name}-%{version}.tar.gz
+Source1: https://download.moodle.org/download.php/direct/stable34/moodle-latest-34.tgz
 BuildArch: noarch
-URL: %{url_prefix}/%{name}
 
 BuildRequires: nethserver-devtools
 
-Requires: moodle >= 3.1.2
+Requires: rh-php71-php-fpm, rh-php71-php-mysqlnd, rh-php71-php-gd
+Requires: rh-php71-php-intl, rh-php71-php-mbstring, rh-php71-php-xmlrpc
+Requires: rh-php71-php-soap, rh-php71-php-opcache, rh-php71-php-ldap
+#Requires: moodle >= 3.1.2
 # Moodle dependencies (not included in moodle spec).
-Requires: php-soap, php-pecl-zendopcache, php-ldap
+#Requires: php-soap, php-pecl-zendopcache, php-ldap
 # NethServer dependencies.
 Requires: nethserver-httpd, nethserver-mysql
 
@@ -19,28 +22,33 @@ Requires: nethserver-httpd, nethserver-mysql
 This package provides NethServer templates and actions needed to
 integrate Moodle learning platform in NethServer.
 
-
 %prep
 %setup
-
 
 %build
 perl createlinks
 
 %install
 rm -rf %{buildroot}
-(cd root/etc/e-smith/templates/var/www/moodle/web/config.php/; ln -s /etc/e-smith/templates-default/template-begin-php template-begin)
+mkdir -p root/usr/share/moodle
+cp %{SOURCE1} root/usr/share/moodle.tgz
+rm -rf %{buildroot}
+#(cd root/etc/e-smith/templates/usr/share/moodle/config.php/; ln -s /etc/e-smith/templates-default/template-begin-php template-begin)
 (cd root; find . -depth -print | cpio -dump %{buildroot})
 %{genfilelist} %{buildroot} > %{name}-%{version}-filelist
-
 
 %files -f %{name}-%{version}-filelist
 %defattr(-,root,root)
 %doc COPYING README.rst
 %dir %{_nseventsdir}/%{name}-update
 
-
 %changelog
+* Sun Mar 4 2018 Markus Neuberger <dev@markusneuberger.at> - 0.1.0-1
+- Change to moodle 3.4
+- Download tgz via source1 instead of epel requirement
+- Change location to /usr/share/moodle and data to /var/lib/nethserver/moodledata
+- Update mysql collation
+
 * Wed Dec 7 2016 Alain Reguera Delgado <alain.reguera@gmail.com> - 0.0.9-1
 - Add support to both alias and virtualhost configuration
 - Update README.srt file to describe recent changes
