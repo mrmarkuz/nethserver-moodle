@@ -1,7 +1,7 @@
 Name: nethserver-moodle
 Summary: Moodle integration in NethServer
 Version: 0.1.0
-Release: 2%{?dist}
+Release: 1%{?dist}
 License: GPL
 Source: %{name}-%{version}.tar.gz
 Source1: https://download.moodle.org/download.php/direct/stable34/moodle-latest-34.tgz
@@ -43,6 +43,8 @@ rm -rf %{buildroot}
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Fri May 04 2018 mrmarkuz <31746411+mrmarkuz@users.noreply.github.com> - 0.1.0-1
+
 * Sun Mar 4 2018 Markus Neuberger <dev@markusneuberger.at> - 0.1.0-1
 - Change to moodle 3.4
 - Download tgz via source1 instead of epel requirement
