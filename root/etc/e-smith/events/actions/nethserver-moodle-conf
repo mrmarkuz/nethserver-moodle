@@ -12,10 +12,14 @@ password=`perl -e "use NethServer::Password; print NethServer::Password::store('
 /usr/bin/mysql --defaults-file=/root/.my.cnf -e "grant all on moodle.* to 'moodle'@'localhost' identified by '$password';"
 #/usr/bin/mysql --defaults-file=/root/.my.cnf -e "FLUSH PRIVILEGES"
 
-
 # install
 rm -Rf /usr/share/moodle
 tar -xzf /usr/share/moodle.tgz -C /usr/share/
+mkdir -p /var/lib/nethserver/moodledata
+chown -R nobody:apache /var/lib/nethserver/moodledata
+chown -R root:root /usr/share/moodle
+chmod -R 755 /usr/share/moodle
+chmod -R 0770 /var/lib/nethserver/moodledata
 expand-template /usr/share/moodle/config.php
 sudo -u apache /opt/rh/rh-php71/root/bin/php /usr/share/moodle/admin/cli/install_database.php --agree-license --adminpass=Nethesis,1234
 
@@ -23,10 +27,3 @@ sudo -u apache /opt/rh/rh-php71/root/bin/php /usr/share/moodle/admin/cli/install
 sudo -u apache /opt/rh/rh-php71/root/bin/php /usr/share/moodle/admin/cli/maintenance.php --enable
 sudo -u apache /opt/rh/rh-php71/root/bin/php /usr/share/moodle/admin/cli/upgrade.php --non-interactive
 sudo -u apache /opt/rh/rh-php71/root/bin/php /usr/share/moodle/admin/cli/maintenance.php --disable
-
-
-mkdir -p /var/lib/nethserver/moodledata
-chown -R apache:apache /var/lib/nethserver/moodledata
-chown -R root:root /usr/share/moodle
-chmod -R 755 /usr/share/moodle
-systemctl restart rh-php71-php-fpm
