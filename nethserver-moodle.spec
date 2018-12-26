@@ -4,7 +4,7 @@ Version: 0.1.2
 Release: 1%{?dist}
 License: GPL
 Source: %{name}-%{version}.tar.gz
-Source1: https://download.moodle.org/download.php/direct/stable35/moodle-latest-35.tgz
+Source1: https://download.moodle.org/download.php/direct/stable36/moodle-latest-36.tgz
 BuildArch: noarch
 
 BuildRequires: nethserver-devtools
