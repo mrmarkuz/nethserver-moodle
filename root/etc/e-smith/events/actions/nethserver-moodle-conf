@@ -13,6 +13,12 @@ password=`perl -e "use NethServer::Password; print NethServer::Password::store('
 #/usr/bin/mysql --defaults-file=/root/.my.cnf -e "FLUSH PRIVILEGES"
 
 # Install moodle
+
+# remove moodle directory if exists
+if [ -d "/usr/share/moodle" ]; then
+  rm -Rf /usr/share/moodle
+fi
+
 tar -xzf /usr/share/moodle.tgz -C /usr/share/
 mkdir -p /var/lib/nethserver/moodledata
 chown -R apache:apache /usr/share/moodle /var/lib/nethserver/moodledata
