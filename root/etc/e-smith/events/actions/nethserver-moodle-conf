@@ -12,19 +12,23 @@ password=`perl -e "use NethServer::Password; print NethServer::Password::store('
 /usr/bin/mysql --defaults-file=/root/.my.cnf -e "grant all on moodle.* to 'moodle'@'localhost' identified by '$password';"
 #/usr/bin/mysql --defaults-file=/root/.my.cnf -e "FLUSH PRIVILEGES"
 
+
+# check if update or install
 if [ -d /usr/share/moodle ]; then
-  mv /usr/share/moodle /usr/share/moodlebackup
+  rm -Rf /usr/share/moodle
+  tar -xzf /usr/share/moodle.tgz -C /usr/share/
+  expand-template /usr/share/moodle/config.php
+  sudo -u apache /opt/rh/rh-php71/root/bin/php /usr/share/moodle/admin/cli/maintenance.php --enable
+  sudo -u apache /opt/rh/rh-php71/root/bin/php /usr/share/moodle/admin/cli/upgrade.php --non-interactive
+  sudo -u apache /opt/rh/rh-php71/root/bin/php /usr/share/moodle/admin/cli/maintenance.php --disable
+else
+  tar -xzf /usr/share/moodle.tgz -C /usr/share/
+  expand-template /usr/share/moodle/config.php
+  sudo -u apache /opt/rh/rh-php71/root/bin/php /usr/share/moodle/admin/cli/install_database.php --agree-license --adminpass=Nethesis,1234
 fi
 
-
-# Install moodle
-tar -xzf /usr/share/moodle.tgz -C /usr/share/
-
-if [ -f /usr/share/moodlebackup/config.php ]; then
-  mv /usr/share/moodle/config.php /usr/share/moodle/config.php.old
-  mv /usr/share/moodlebackup/config.php /usr/share/moodle
-fi
 
 mkdir -p /var/lib/nethserver/moodledata
-chown -R apache:apache /usr/share/moodle /var/lib/nethserver/moodledata
+chown -R root:root /usr/share/moodle /var/lib/nethserver/moodledata
+chmod -R 755 /usr/share/moodle
 systemctl restart rh-php71-php-fpm
