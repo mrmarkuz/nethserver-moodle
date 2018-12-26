@@ -12,8 +12,19 @@ password=`perl -e "use NethServer::Password; print NethServer::Password::store('
 /usr/bin/mysql --defaults-file=/root/.my.cnf -e "grant all on moodle.* to 'moodle'@'localhost' identified by '$password';"
 #/usr/bin/mysql --defaults-file=/root/.my.cnf -e "FLUSH PRIVILEGES"
 
+if [ -d /usr/share/moodle ]; then
+  mv /usr/share/moodle /usr/share/moodlebackup
+fi
+
+
 # Install moodle
 tar -xzf /usr/share/moodle.tgz -C /usr/share/
+
+if [ -f /usr/share/moodlebackup/config.php ]; then
+  mv /usr/share/moodle/config.php /usr/share/moodle/config.php.old
+  mv /usr/share/moodlebackup/config.php /usr/share/moodle
+fi
+
 mkdir -p /var/lib/nethserver/moodledata
 chown -R apache:apache /usr/share/moodle /var/lib/nethserver/moodledata
 systemctl restart rh-php71-php-fpm
