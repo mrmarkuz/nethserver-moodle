@@ -1,17 +1,17 @@
 Name: nethserver-moodle
 Summary: Moodle integration in NethServer
-Version: 0.1.2
+Version: 0.1.3
 Release: 1%{?dist}
 License: GPL
 Source: %{name}-%{version}.tar.gz
-Source1: https://download.moodle.org/download.php/direct/stable36/moodle-latest-36.tgz
+Source1: https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz
 BuildArch: noarch
 
 BuildRequires: nethserver-devtools
 
-Requires: rh-php71-php-fpm, rh-php71-php-mysqlnd, rh-php71-php-gd
-Requires: rh-php71-php-intl, rh-php71-php-mbstring, rh-php71-php-xmlrpc
-Requires: rh-php71-php-soap, rh-php71-php-opcache, rh-php71-php-ldap, nethserver-rh-php71-php-fpm
+Requires: rh-php72-php-fpm, rh-php72-php-mysqlnd, rh-php72-php-gd
+Requires: rh-php72-php-intl, rh-php72-php-mbstring, rh-php72-php-xmlrpc
+Requires: rh-php72-php-soap, rh-php72-php-opcache, rh-php72-php-ldap, nethserver-rh-php72-php-fpm
 #Requires: moodle >= 3.1.2
 # Moodle dependencies (not included in moodle spec).
 #Requires: php-soap, php-pecl-zendopcache, php-ldap
