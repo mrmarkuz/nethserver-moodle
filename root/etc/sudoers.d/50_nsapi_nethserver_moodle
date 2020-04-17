@@ -1,0 +1,7 @@
+#
+# nsapi_nethserver_moodle
+#
+Cmnd_Alias NSAPI_NETHSERVER_MOODLE = \
+    /usr/libexec/nethserver/api/nethserver-moodle/read
+
+Defaults!NSAPI_NETHSERVER_MOODLE !requiretty

@@ -1,17 +1,17 @@
 Name: nethserver-moodle
 Summary: Moodle integration in NethServer
-Version: 0.1.3
-Release: 1%{?dist}
+Version: 0.1.2
+Release: 2%{?dist}
 License: GPL
 Source: %{name}-%{version}.tar.gz
-Source1: https://download.moodle.org/download.php/direct/stable37/moodle-latest-37.tgz
+Source1: https://download.moodle.org/download.php/direct/stable38/moodle-latest-38.tgz
 BuildArch: noarch
 
 BuildRequires: nethserver-devtools
 
-Requires: rh-php72-php-fpm, rh-php72-php-mysqlnd, rh-php72-php-gd
-Requires: rh-php72-php-intl, rh-php72-php-mbstring, rh-php72-php-xmlrpc
-Requires: rh-php72-php-soap, rh-php72-php-opcache, rh-php72-php-ldap, nethserver-rh-php72-php-fpm
+Requires: rh-php73-php-fpm, rh-php73-php-mysqlnd, rh-php73-php-gd
+Requires: rh-php73-php-intl, rh-php73-php-mbstring, rh-php73-php-xmlrpc
+Requires: rh-php73-php-soap, rh-php73-php-opcache, rh-php73-php-ldap, nethserver-rh-php73-php-fpm
 #Requires: moodle >= 3.1.2
 # Moodle dependencies (not included in moodle spec).
 #Requires: php-soap, php-pecl-zendopcache, php-ldap
@@ -43,12 +43,11 @@ rm -rf %{buildroot}
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
-* Sat Dec 08 2018 mrmarkuz <31746411+mrmarkuz@users.noreply.github.com> - 0.1.2-1
-  - Update to moodle 3.5
+* Sat Apr 18 2020 Markus Neuberger <dev@markusneuberger.at> - 0.1.2-2
+- Update to moodle 3.8
 
-* Fri May 04 2018 mrmarkuz <31746411+mrmarkuz@users.noreply.github.com> - 0.1.1-1
-
-* Fri May 04 2018 mrmarkuz <31746411+mrmarkuz@users.noreply.github.com> - 0.1.0-1
+* Sat Dec 08 2018 Markus Neuberger <dev@markusneuberger.at> - 0.1.2-1
+- Update to moodle 3.5
 
 * Sun Mar 4 2018 Markus Neuberger <dev@markusneuberger.at> - 0.1.0-1
 - Change to moodle 3.4
