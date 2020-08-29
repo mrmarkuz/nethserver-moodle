@@ -2,6 +2,6 @@ Alias /moodle /usr/share/moodle
 <Directory /usr/share/moodle>
   Require all granted
   <FilesMatch \.php$>
-        SetHandler "proxy:fcgi://127.0.0.1:9001"
+        SetHandler "proxy:fcgi://127.0.0.1:9003"
   </FilesMatch>
 </Directory>

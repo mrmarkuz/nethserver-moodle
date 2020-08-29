@@ -6,7 +6,7 @@ $CFG = new stdClass();
 
 $CFG->dbtype    = 'mariadb';
 $CFG->dblibrary = 'native';
-$CFG->dbhost    = 'localhost';
+$CFG->dbhost    = '127.0.0.1';
 $CFG->dbname    = 'moodle';
 $CFG->dbuser    = 'moodle';
 {
@@ -17,7 +17,7 @@ $OUT .= "\$CFG->dbpass    = '$password';";
 $CFG->prefix    = 'mdl_';
 $CFG->dboptions = array (
   'dbpersist' => 0,
-  'dbport' => '',
+  'dbport' => '3313',
   'dbsocket' => '',
   'dbcollation' => 'utf8mb4_bin',
 );

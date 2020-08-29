@@ -7,24 +7,27 @@
 
 password=`perl -e "use NethServer::Password; print NethServer::Password::store('moodle');"`
 
-# initialize grants mysql moodle database
-/usr/bin/mysql --defaults-file=/root/.my.cnf -e "CREATE DATABASE IF NOT EXISTS moodle character set utf8mb4 collate utf8mb4_bin;"
-/usr/bin/mysql --defaults-file=/root/.my.cnf -e "grant all on moodle.* to 'moodle'@'localhost' identified by '$password';"
-/usr/bin/mysql --defaults-file=/root/.my.cnf -e "FLUSH PRIVILEGES"
+# initialize mariadb103 moodle database
+/usr/bin/mysql103 -e "CREATE DATABASE IF NOT EXISTS moodle character set utf8mb4 collate utf8mb4_bin;"
+/usr/bin/mysql103 -e "grant all on moodle.* to 'moodle'@'localhost' identified by '$password';"
+/usr/bin/mysql103 -e "FLUSH PRIVILEGES;"
 
 # install
+if [ ! -f /usr/share/moodle/version.php ] || [ ! $(cat /usr/share/moodle/version.php | grep "\$version  =" | cut -c 13-25) = 2020061501.12 ]; then
 rm -Rf /usr/share/moodle
 tar -xzf /usr/share/moodle.tgz -C /usr/share/
 mkdir -p /var/lib/nethserver/moodledata
 chown -R nobody:apache /var/lib/nethserver/moodledata
-chown -R root:root /usr/share/moodle
-chmod -R 755 /usr/share/moodle
+chown -R apache:apache /usr/share/moodle
+#chmod -R 755 /usr/share/moodle
 chmod -R 0770 /var/lib/nethserver/moodledata
 expand-template /usr/share/moodle/config.php
-systemctl restart mysqld
-sudo -u apache /opt/rh/rh-php71/root/bin/php /usr/share/moodle/admin/cli/install_database.php --agree-license --adminpass=Nethesis,1234
+systemctl restart rh-mariadb103-mariadb
+sudo -u apache /opt/rh/rh-php73/root/bin/php /usr/share/moodle/admin/cli/install_database.php --agree-license --adminpass=Nethesis,1234
+sudo -u apache /opt/rh/rh-php73/root/bin/php /usr/share/moodle/admin/cli/kill_all_sessions.php
+fi
 
 # upgrade
-sudo -u apache /opt/rh/rh-php71/root/bin/php /usr/share/moodle/admin/cli/maintenance.php --enable
-sudo -u apache /opt/rh/rh-php71/root/bin/php /usr/share/moodle/admin/cli/upgrade.php --non-interactive
-sudo -u apache /opt/rh/rh-php71/root/bin/php /usr/share/moodle/admin/cli/maintenance.php --disable
+sudo -u apache /opt/rh/rh-php73/root/bin/php /usr/share/moodle/admin/cli/maintenance.php --enable
+sudo -u apache /opt/rh/rh-php73/root/bin/php /usr/share/moodle/admin/cli/upgrade.php --non-interactive
+sudo -u apache /opt/rh/rh-php73/root/bin/php /usr/share/moodle/admin/cli/maintenance.php --disable

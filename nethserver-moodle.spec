@@ -1,22 +1,22 @@
 Name: nethserver-moodle
 Summary: Moodle integration in NethServer
 Version: 0.1.2
-Release: 1%{?dist}
+Release: 3%{?dist}
 License: GPL
 Source: %{name}-%{version}.tar.gz
-Source1: https://download.moodle.org/download.php/direct/stable38/moodle-latest-38.tgz
+Source1: https://download.moodle.org/download.php/direct/stable39/moodle-latest-39.tgz
 BuildArch: noarch
 
 BuildRequires: nethserver-devtools
 
-Requires: rh-php73-php-fpm, rh-php73-php-mysqlnd, rh-php73-php-gd
+Requires: rh-php73-php-fpm, rh-php73-php-mysqlnd, rh-php73-php-gd, nethserver-rh-mariadb103
 Requires: rh-php73-php-intl, rh-php73-php-mbstring, rh-php73-php-xmlrpc
 Requires: rh-php73-php-soap, rh-php73-php-opcache, rh-php73-php-ldap, nethserver-rh-php73-php-fpm
 #Requires: moodle >= 3.1.2
 # Moodle dependencies (not included in moodle spec).
 #Requires: php-soap, php-pecl-zendopcache, php-ldap
 # NethServer dependencies.
-Requires: nethserver-httpd, nethserver-mysql
+Requires: nethserver-httpd
 
 %description
 This package provides NethServer templates and actions needed to
@@ -43,6 +43,9 @@ rm -rf %{buildroot}
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Sat August 29 2020 Markus Neuberger <dev@markusneuberger.at> - 0.1.2-3
+- Update to moodle 3.9 LTS
+
 * Sat Apr 18 2020 Markus Neuberger <dev@markusneuberger.at> - 0.1.2-2
 - Update to moodle 3.8
 
