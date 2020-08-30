@@ -30,17 +30,31 @@ perl createlinks
 
 %install
 rm -rf %{buildroot}
-mkdir -p root/usr/share/moodle
-cp %{SOURCE1} root/usr/share/moodle.tgz
-rm -rf %{buildroot}
-#(cd root/etc/e-smith/templates/usr/share/moodle/config.php/; ln -s /etc/e-smith/templates-default/template-begin-php template-begin)
 (cd root; find . -depth -print | cpio -dump %{buildroot})
-%{genfilelist} %{buildroot} > %{name}-%{version}-filelist
+
+mkdir -p %{buildroot}/usr/share/moodle
+mkdir -p %{buildroot}/usr/share/cockpit/nethserver/applications/
+mkdir -p %{buildroot}/usr/libexec/nethserver/api/%{name}/
+tar -xzf %{SOURCE1} -C %{buildroot}/usr/share/
+
+cp -a %{name}.json %{buildroot}/usr/share/cockpit/nethserver/applications/
+cp -a api/* %{buildroot}/usr/libexec/nethserver/api/%{name}/
+cp -a ui/* %{buildroot}/usr/share/cockpit/%{name}/
+
+#cp %{SOURCE1} root/usr/share/moodle.tgz
+#rm -rf %{buildroot}
+#(cd root/etc/e-smith/templates/usr/share/moodle/config.php/; ln -s /etc/e-smith/templates-default/template-begin-php template-begin)
+
+%{genfilelist} %{buildroot} \
+  --file /etc/sudoers.d/50_nsapi_nethserver_moodle 'attr(0440,root,root)' \
+  --file /usr/libexec/nethserver/api/%{name}/read 'attr(775,root,root)' \
+  --dir /var/lib/nethserver/moodledata 'attr(0770,apache,apache)' > %{name}-%{version}-filelist
 
 %files -f %{name}-%{version}-filelist
 %defattr(-,root,root)
 %doc COPYING README.rst
 %dir %{_nseventsdir}/%{name}-update
+%dir %attr(0755,root,root) /usr/share/moodle
 
 %changelog
 * Sat August 29 2020 Markus Neuberger <dev@markusneuberger.at> - 0.1.2-3
