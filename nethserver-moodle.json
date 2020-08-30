@@ -1,5 +1,5 @@
 {
-  "id": "nethserver-zabbix",
+  "id": "nethserver-moodle",
   "name": "Moodle",
   "summary": "Nethserver integration of Moodle learning portal",
   "description": "Provides a learning management system",

@@ -17,6 +17,16 @@ Requires: rh-php73-php-soap, rh-php73-php-opcache, rh-php73-php-ldap, nethserver
 #Requires: php-soap, php-pecl-zendopcache, php-ldap
 # NethServer dependencies.
 Requires: nethserver-httpd
+AutoReqProv: no
+
+
+
+#%define _strip_opts --debuginfo -x "mimetex*"
+#%define debug_package %{nil}
+#%define _binaries_in_noarch_packages_terminate_build 0
+#%define _unpackaged_files_terminate_build 0
+#%undefine _missing_build_ids_terminate_build
+#%define __requires_exclude ^perl(\s|)\(.*\)$
 
 %description
 This package provides NethServer templates and actions needed to
@@ -32,7 +42,9 @@ perl createlinks
 rm -rf %{buildroot}
 (cd root; find . -depth -print | cpio -dump %{buildroot})
 
-mkdir -p %{buildroot}/usr/share/moodle
+mkdir -p %{buildroot}/var/lib/nethserver/moodledata
+
+mkdir -p %{buildroot}/usr/share/cockpit/%{name}/
 mkdir -p %{buildroot}/usr/share/cockpit/nethserver/applications/
 mkdir -p %{buildroot}/usr/libexec/nethserver/api/%{name}/
 tar -xzf %{SOURCE1} -C %{buildroot}/usr/share/
@@ -47,14 +59,38 @@ cp -a ui/* %{buildroot}/usr/share/cockpit/%{name}/
 
 %{genfilelist} %{buildroot} \
   --file /etc/sudoers.d/50_nsapi_nethserver_moodle 'attr(0440,root,root)' \
-  --file /usr/libexec/nethserver/api/%{name}/read 'attr(775,root,root)' \
-  --dir /var/lib/nethserver/moodledata 'attr(0770,apache,apache)' > %{name}-%{version}-filelist
+  --dir /var/lib/nethserver/moodledata 'attr(0770,apache,apache)' | grep -v /usr/share/moodle \
+> %{name}-%{version}-filelist
+
+# | grep -v /usr/share/moodle/
+
+exit 0
 
 %files -f %{name}-%{version}-filelist
 %defattr(-,root,root)
-%doc COPYING README.rst
+%doc COPYING
+%doc README.rst
 %dir %{_nseventsdir}/%{name}-update
-%dir %attr(0755,root,root) /usr/share/moodle
+%dir /usr/share/moodle/ %attr(0755,root,root)
+%attr(755,root,root) /usr/share/moodle/*
+/etc/e-smith/events/nethserver-moodle-update/templates2expand/usr/share/moodle/config.php
+/etc/e-smith/templates/usr/share/moodle/config.php/10base
+/etc/e-smith/templates/usr/share/moodle/config.php/template-begin
+/usr/share/moodle/.eslintignore
+/usr/share/moodle/.eslintrc
+/usr/share/moodle/.gherkin-lintrc
+/usr/share/moodle/.gitattributes
+/usr/share/moodle/.github/FUNDING.yml
+/usr/share/moodle/.jshintignore
+/usr/share/moodle/.jshintrc
+/usr/share/moodle/.nvmrc
+/usr/share/moodle/.shifter.json
+/usr/share/moodle/.stylelintignore
+/usr/share/moodle/.stylelintrc
+/usr/share/moodle/.travis.yml
+
+#%dir %attr(0755,root,root) /usr/share/moodle
+#%attr(0644,root,root) /usr/share/moodle
 
 %changelog
 * Sat August 29 2020 Markus Neuberger <dev@markusneuberger.at> - 0.1.2-3
