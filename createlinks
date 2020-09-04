@@ -46,3 +46,7 @@ event_services("nethserver-moodle-update", qw(
     rh-mariadb103-mariadb restart
     rh-php73-php-fpm restart
 ));
+
+event_actions("nethserver-sssd-save", qw(
+    nethserver-moodle-conf 50
+));

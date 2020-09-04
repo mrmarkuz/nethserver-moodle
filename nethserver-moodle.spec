@@ -5,6 +5,7 @@ Release: 3%{?dist}
 License: GPL
 Source: %{name}-%{version}.tar.gz
 Source1: https://download.moodle.org/download.php/direct/stable39/moodle-latest-39.tgz
+Source2: https://moodle.org/plugins/download.php/21420/moosh_moodle38_2020042300.zip
 BuildArch: noarch
 
 BuildRequires: nethserver-devtools
@@ -12,14 +13,9 @@ BuildRequires: nethserver-devtools
 Requires: rh-php73-php-fpm, rh-php73-php-mysqlnd, rh-php73-php-gd, nethserver-rh-mariadb103
 Requires: rh-php73-php-intl, rh-php73-php-mbstring, rh-php73-php-xmlrpc
 Requires: rh-php73-php-soap, rh-php73-php-opcache, rh-php73-php-ldap, nethserver-rh-php73-php-fpm
-#Requires: moodle >= 3.1.2
-# Moodle dependencies (not included in moodle spec).
-#Requires: php-soap, php-pecl-zendopcache, php-ldap
-# NethServer dependencies.
 Requires: nethserver-httpd
+
 AutoReqProv: no
-
-
 
 #%define _strip_opts --debuginfo -x "mimetex*"
 #%define debug_package %{nil}
@@ -48,21 +44,16 @@ mkdir -p %{buildroot}/usr/share/cockpit/%{name}/
 mkdir -p %{buildroot}/usr/share/cockpit/nethserver/applications/
 mkdir -p %{buildroot}/usr/libexec/nethserver/api/%{name}/
 tar -xzf %{SOURCE1} -C %{buildroot}/usr/share/
+unzip %{SOURCE2} -d %{buildroot}/usr/share/
 
 cp -a %{name}.json %{buildroot}/usr/share/cockpit/nethserver/applications/
 cp -a api/* %{buildroot}/usr/libexec/nethserver/api/%{name}/
 cp -a ui/* %{buildroot}/usr/share/cockpit/%{name}/
 
-#cp %{SOURCE1} root/usr/share/moodle.tgz
-#rm -rf %{buildroot}
-#(cd root/etc/e-smith/templates/usr/share/moodle/config.php/; ln -s /etc/e-smith/templates-default/template-begin-php template-begin)
-
 %{genfilelist} %{buildroot} \
   --file /etc/sudoers.d/50_nsapi_nethserver_moodle 'attr(0440,root,root)' \
-  --dir /var/lib/nethserver/moodledata 'attr(0770,apache,apache)' | grep -v /usr/share/moodle \
+  --dir /var/lib/nethserver/moodledata 'attr(0770,apache,apache)' | grep -v /usr/share/moodle | grep -v /usr/share/moosh \
 > %{name}-%{version}-filelist
-
-# | grep -v /usr/share/moodle/
 
 exit 0
 
@@ -89,12 +80,14 @@ exit 0
 /usr/share/moodle/.stylelintrc
 /usr/share/moodle/.travis.yml
 
-#%dir %attr(0755,root,root) /usr/share/moodle
-#%attr(0644,root,root) /usr/share/moodle
+%dir /usr/share/moosh/ %attr(0755,root,root)
+%attr(755,root,root) /usr/share/moosh/*
 
 %changelog
-* Sat August 29 2020 Markus Neuberger <dev@markusneuberger.at> - 0.1.2-3
+* Fri Sep 04 2020 Markus Neuberger <dev@markusneuberger.at> - 0.1.2-3
 - Update to moodle 3.9 LTS
+- Include moosh
+- Preconfigure AD/LDAP plugin
 
 * Sat Apr 18 2020 Markus Neuberger <dev@markusneuberger.at> - 0.1.2-2
 - Update to moodle 3.8

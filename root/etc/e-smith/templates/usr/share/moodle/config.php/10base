@@ -16,10 +16,10 @@ $OUT .= "\$CFG->dbpass    = '$password';";
 }
 $CFG->prefix    = 'mdl_';
 $CFG->dboptions = array (
-  'dbpersist' => 0,
+  'dbpersist' => false,
   'dbport' => '3313',
-  'dbsocket' => '',
-  'dbcollation' => 'utf8mb4_bin',
+  'dbsocket' => false,
+  'dbcollation' => 'utf8mb4_unicode_ci',
 );
 {
 my $host = ${'moodle'}{'host'} || $SystemName . '.' . $DomainName;
@@ -28,7 +28,10 @@ $OUT .= "\$CFG->wwwroot   = 'https://$host/moodle';";
 $CFG->dataroot  = '/var/lib/nethserver/moodledata';
 $CFG->admin     = 'admin';
 
-$CFG->directorypermissions = 0777;
+// Old value
+// $CFG->directorypermissions = 0777;
+
+$CFG->directorypermissions = 02777;
 
 require_once(__DIR__ . '/lib/setup.php');
 
