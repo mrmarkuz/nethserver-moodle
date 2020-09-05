@@ -19,7 +19,7 @@ if [[ $isad == 1 ]] || [[ $isldap == 1 ]]; then
   sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="search_sub" --set="1"
 
   # TLS
-  if [[ $starttls == "enabled" ]]; then
+  if [[ $starttls == 1 ]]; then
     sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="start_tls" --set="1"
   else
     sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="start_tls" --set="0"
