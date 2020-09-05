@@ -1,0 +1,57 @@
+#!/bin/bash
+
+ldapuri=`/usr/sbin/e-smith/config getprop sssd LdapURI`
+binddn=`/usr/sbin/e-smith/config getprop sssd BindDN`
+bindpassword=`/usr/sbin/e-smith/config getprop sssd BindPassword`
+basedn=`/usr/sbin/e-smith/config getprop sssd BaseDN`
+provider=`/usr/sbin/e-smith/config getprop sssd Provider`
+starttls=`/usr/sbin/e-smith/config getprop sssd StartTls`
+
+# config ldap plugin if AD or LDAP is available
+if [[ $provider == "ad" ]] || [[ $provider == "ldap" ]]; then
+  # General settings
+  sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="host_url" --set="$ldapuri"
+  sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="ldap_version" --set="3"
+  sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="bind_dn" --set="$binddn"
+  sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="bind_pw" --set="$bindpassword"
+  sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="search_sub" --set="1"
+
+  # TLS
+  if [[ $starttls == "enabled" ]]; then
+    sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="start_tls" --set="1"
+  else
+    sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="start_tls" --set="0"
+  fi
+
+  # AD
+  if [[ $provider == "ad" ]]; then
+    echo AD detected
+    sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="user_type" --set="ad"
+    sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="contexts" --set="$basedn"
+    sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="user_attribute" --set="cn"
+    sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="field_map_firstname" --set="givenName"
+    sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="field_map_lastname" --set="cn"
+    sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="field_map_email" --set="userPrincipalName"
+  fi
+
+  # LDAP
+  if [[ $provider == "ldap" ]]; then
+    echo LDAP detected
+    sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="user_type" --set="rfc2307"
+    sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="contexts" --set="ou=People,dc=directory,dc=nh"
+    sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="user_attribute" --set="uid"
+    sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="field_map_firstname" --set="gecos"
+    sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="field_map_lastname" --set="uid"
+    sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/cfg.php --component="auth_ldap" --name="field_map_email" --set="Email"
+  fi
+
+  # enable ldap plugin
+  sudo -u apache scl enable rh-php73 -- php /usr/local/bin/moosh -p /usr/share/moodle auth-manage enable ldap
+
+  # enable ldap sync task
+  echo 'use moodle;
+  UPDATE mdl_task_scheduled SET disabled = "0", hour = "*", minute = "*/10" WHERE classname = "\\auth_ldap\\task\\sync_task";' | mysql103
+
+  # purge cache to refresh moodle config from db
+  sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/purge_caches.php
+fi

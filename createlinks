@@ -27,6 +27,8 @@ use esmith::Build::CreateLinks qw(:all);
 event_actions("nethserver-moodle-update", qw(
     initialize-default-databases 00
     nethserver-moodle-conf 20
+    nethserver-moodle-conf-ldap 30
+    nethserver-moodle-sync-users 99
 ));
 
 #
@@ -48,5 +50,6 @@ event_services("nethserver-moodle-update", qw(
 ));
 
 event_actions("nethserver-sssd-save", qw(
-    nethserver-moodle-conf 50
+    nethserver-moodle-conf-ldap 50
+    nethserver-moodle-sync-users 99
 ));

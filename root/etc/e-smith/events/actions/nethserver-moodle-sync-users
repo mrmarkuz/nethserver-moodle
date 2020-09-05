@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# run ldap sync task
+sudo -u apache scl enable rh-php73 -- php /usr/share/moodle/admin/cli/scheduled_task.php --execute="\auth_ldap\task\sync_task"
