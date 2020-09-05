@@ -52,6 +52,7 @@ cp -a ui/* %{buildroot}/usr/share/cockpit/%{name}/
 
 %{genfilelist} %{buildroot} \
   --file /etc/sudoers.d/50_nsapi_nethserver_moodle 'attr(0440,root,root)' \
+  --file /usr/libexec/nethserver/api/%{name}/read 'attr(775,root,root)' \
   --dir /var/lib/nethserver/moodledata 'attr(0770,apache,apache)' | grep -v /usr/share/moodle | grep -v /usr/share/moosh \
 > %{name}-%{version}-filelist
 
