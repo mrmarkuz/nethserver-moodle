@@ -1,7 +1,7 @@
 Name: nethserver-moodle
 Summary: Moodle integration in NethServer
 Version: 0.1.2
-Release: 3%{dist}
+Release: 3%{?dist}
 License: GPL
 Source: %{name}-%{version}.tar.gz
 Source1: https://download.moodle.org/download.php/direct/stable39/moodle-latest-39.tgz
