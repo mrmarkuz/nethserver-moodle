@@ -1,7 +1,7 @@
 Name: nethserver-moodle
 Summary: Moodle integration in NethServer
-Version: 0.1.3
-Release: 2%{?dist}
+Version: 0.1.3-2
+Release: 1%{?dist}
 License: GPL
 Source: %{name}-%{version}.tar.gz
 Source1: https://download.moodle.org/download.php/direct/stable39/moodle-3.9.2.tgz
@@ -85,6 +85,8 @@ exit 0
 %attr(755,root,root) /usr/share/moosh/*
 
 %changelog
+* Tue Sep 15 2020 mrmarkuz <31746411+mrmarkuz@users.noreply.github.com> - 0.1.3-2-1
+
 * Sat Sep 05 2020 mrmarkuz <31746411+mrmarkuz@users.noreply.github.com> - 0.1.3-1
   - Add theme and mod dirs to backup
   - Preconfigure LDAP
