@@ -4,7 +4,7 @@ Version: 0.1.3
 Release: 2%{?dist}
 License: GPL
 Source: %{name}-%{version}.tar.gz
-Source1: https://download.moodle.org/download.php/direct/stable39/moodle-latest-39.tgz
+Source1: https://download.moodle.org/download.php/direct/stable39/moodle-3.9.2.tgz
 Source2: https://moodle.org/plugins/download.php/21420/moosh_moodle38_2020042300.zip
 BuildArch: noarch
 
