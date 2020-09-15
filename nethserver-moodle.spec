@@ -1,6 +1,6 @@
 Name: nethserver-moodle
 Summary: Moodle integration in NethServer
-Version: 0.1.3-2
+Version: 0.1.4
 Release: 1%{?dist}
 License: GPL
 Source: %{name}-%{version}.tar.gz
@@ -85,6 +85,10 @@ exit 0
 %attr(755,root,root) /usr/share/moosh/*
 
 %changelog
+* Tue Sep 15 2020 mrmarkuz <31746411+mrmarkuz@users.noreply.github.com> - 0.1.4-1
+  - Fix moodle source
+  - Raise Release
+
 * Tue Sep 15 2020 mrmarkuz <31746411+mrmarkuz@users.noreply.github.com> - 0.1.3-2-1
 
 * Sat Sep 05 2020 mrmarkuz <31746411+mrmarkuz@users.noreply.github.com> - 0.1.3-1
