@@ -1,10 +1,10 @@
 Name: nethserver-moodle
 Summary: Moodle integration in NethServer
 Version: 0.1.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPL
 Source: %{name}-%{version}.tar.gz
-Source1: https://download.moodle.org/download.php/direct/stable39/moodle-3.9.2.tgz
+Source1: https://download.moodle.org/download.php/direct/stable39/moodle-latest-39.tgz
 Source2: https://moodle.org/plugins/download.php/21420/moosh_moodle38_2020042300.zip
 BuildArch: noarch
 
@@ -43,7 +43,7 @@ mkdir -p %{buildroot}/var/lib/nethserver/moodledata
 mkdir -p %{buildroot}/usr/share/cockpit/%{name}/
 mkdir -p %{buildroot}/usr/share/cockpit/nethserver/applications/
 mkdir -p %{buildroot}/usr/libexec/nethserver/api/%{name}/
-tar -xzf %{SOURCE1} -C %{buildroot}/usr/share/
+tar -zxvf %{SOURCE1} -C %{buildroot}/usr/share/
 unzip %{SOURCE2} -d %{buildroot}/usr/share/
 
 cp -a %{name}.json %{buildroot}/usr/share/cockpit/nethserver/applications/
@@ -80,11 +80,16 @@ exit 0
 /usr/share/moodle/.stylelintignore
 /usr/share/moodle/.stylelintrc
 /usr/share/moodle/.travis.yml
+/usr/share/moodle/.github/workflows/config-template.php
+/usr/share/moodle/.github/workflows/push.yml
 
 %dir /usr/share/moosh/ %attr(0755,root,root)
 %attr(755,root,root) /usr/share/moosh/*
 
 %changelog
+* Mon Feb 22 2021 Markus Neuberger <dev@markusneuberger.at> - 0.1.4-2
+  - Update to 3.9.4
+
 * Tue Sep 15 2020 mrmarkuz <31746411+mrmarkuz@users.noreply.github.com> - 0.1.4-1
   - Fix moodle source
   - Raise Release
